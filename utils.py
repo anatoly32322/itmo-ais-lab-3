@@ -7,12 +7,10 @@ def get_random_selection(selection: pd.DataFrame) -> pd.DataFrame:
     return selection.sample(frac=0.5)
 
 
-# freq(Cj,T) - сколько элементов множества T принадлежат классу Cj
 def freq(data_part, cj):
     return (data_part.GRADE == cj).sum()
 
 
-# энтропия для множества data_part
 def info(data_part):
     sum = 0
     for class_value in data_part.GRADE.unique():
@@ -21,7 +19,6 @@ def info(data_part):
     return -sum
 
 
-# условная энтропия
 def info_x(data_part, partition_field):
     sum = 0
     for field_value in data_part[partition_field].unique():

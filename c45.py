@@ -1,11 +1,8 @@
-import sys
-
 import numpy as np
 import pandas as pd
 
 from utils import info, info_x, split_info_x
 
-sys.setrecursionlimit(10000)
 
 class C45Tree:
     leaf: bool
@@ -25,8 +22,6 @@ class C45Tree:
 
         self.subtrees = {}
 
-        self.partition_field = None
-
         self.leaf_class = data.GRADE.unique()
 
         if not any(subset_fields_gain_ratios) or len(data.GRADE.unique()) == 1:
@@ -38,9 +33,7 @@ class C45Tree:
         self.leaf = False
         for partition_field_value in data[self.partition_field].unique():
             self.subtrees[partition_field_value] = C45Tree(
-                data[data[
-                              self.partition_field] == partition_field_value]
-                .drop(columns=self.partition_field))
+                data[data[self.partition_field] == partition_field_value].drop(columns=self.partition_field))
 
     def traverse(self, data_item: pd.DataFrame) -> np.int64:
         if not self.leaf:
@@ -54,6 +47,5 @@ class C45Tree:
         return self.most_popular_class
 
 
-# нормированный прирост информации
 def gain_ratio(data: pd.DataFrame, partition_field: pd.Index):
     return (info(data) - info_x(data, partition_field)) / split_info_x(data, partition_field)
